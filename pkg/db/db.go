@@ -1,7 +1,7 @@
 package db
 
 import (
-	"github.com/gladiusio/gladius-application-server/pkg/db/models"
+	"github.com/gladiusio/gladius-common/pkg/db/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // sqlite for now, SQL later on
 )
