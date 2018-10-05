@@ -1,8 +1,7 @@
-package response
+package responses
 
 import (
 	"encoding/json"
-
 	"github.com/ethereum/go-ethereum/common"
 )
 
@@ -32,15 +31,6 @@ type PublicKeyResponse struct {
 
 type CreationResponse struct {
 	Created bool `json:"created"`
-}
-
-type DefaultResponse struct {
-	Message     string      `json:"message"`
-	Success     bool        `json:"success"`
-	Error       string      `json:"error"`
-	Response    interface{} `json:"response"`
-	Transaction *TxHash     `json:"txHash"`
-	Endpoint    string      `json:"endpoint"`
 }
 
 type TxHash struct {
