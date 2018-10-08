@@ -2,6 +2,9 @@ package blockchain
 
 import (
 	"encoding/json"
+	"log"
+	"net/http"
+
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -10,8 +13,6 @@ import (
 	"github.com/gladiusio/gladius-controld/pkg/routing/response"
 	"github.com/gladiusio/gladius-controld/pkg/utils"
 	"github.com/spf13/viper"
-	"log"
-	"net/http"
 )
 
 // ConnectMarket - Connect and return configured market

@@ -1,11 +1,12 @@
 package blockchain
 
 import (
+	"log"
+
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/gladiusio/gladius-controld/pkg/blockchain/generated"
-	"log"
 )
 
 // ConnectNode - Connect and grab node

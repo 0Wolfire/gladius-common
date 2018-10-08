@@ -2,6 +2,7 @@ package responses
 
 import (
 	"encoding/json"
+
 	"github.com/ethereum/go-ethereum/common"
 )
 
@@ -53,7 +54,7 @@ func (response *DefaultResponse) FormatTransactionResponse(transaction string) {
 		EndPoint: "http://localhost:3001/api/status/tx/" + transaction,
 		Value:    transaction,
 		Etherscan: etherscan{
-			Main: "https://etherscan.io/tx/" + transaction,
+			Main:    "https://etherscan.io/tx/" + transaction,
 			Ropsten: "https://ropsten.etherscan.io/tx/" + transaction,
 		},
 	}
