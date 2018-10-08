@@ -6,7 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/gladiusio/gladius-controld/pkg/blockchain/generated"
+	"github.com/gladiusio/gladius-common/pkg/blockchain/generated"
 )
 
 // ConnectNode - Connect and grab node

@@ -9,9 +9,9 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
 
-	"github.com/gladiusio/gladius-controld/pkg/blockchain"
-	"github.com/gladiusio/gladius-controld/pkg/p2p/peer"
-	"github.com/gladiusio/gladius-controld/pkg/routing/handlers"
+	"github.com/gladiusio/gladius-common/pkg/blockchain"
+	"github.com/gladiusio/gladius-p2p/pkg/p2p/peer"
+	"github.com/gladiusio/gladius-common/pkg/handlers"
 	ghandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
