@@ -85,7 +85,7 @@ func MarketPoolAddressesToArrayResponse(poolAddresses []common.Address, includeD
 			poolUrl, err := PoolRetrieveApplicationServerUrl(poolAddress.String(), ga)
 
 			poolInformationResponse, err := requests.SendRequest(http.MethodGet, poolUrl+"server/info", nil)
-			var defaultResponse response.DefaultResponse
+			var defaultResponse responses.DefaultResponse
 			json.Unmarshal([]byte(poolInformationResponse), &defaultResponse)
 
 			var poolInformation models.PoolInformation
