@@ -8,10 +8,10 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/gladiusio/gladius-application-server/pkg/db/models"
-	"github.com/gladiusio/gladius-controld/pkg/blockchain/generated"
-	"github.com/gladiusio/gladius-controld/pkg/routing/response"
-	"github.com/gladiusio/gladius-controld/pkg/utils"
+	"github.com/gladiusio/gladius-common/pkg/db/models"
+	"github.com/gladiusio/gladius-common/pkg/blockchain/generated"
+	"github.com/gladiusio/gladius-common/pkg/routing/response"
+	"github.com/gladiusio/gladius-common/pkg/requests"
 	"github.com/spf13/viper"
 )
 
@@ -84,7 +84,7 @@ func MarketPoolAddressesToArrayResponse(poolAddresses []common.Address, includeD
 		if includeData {
 			poolUrl, err := PoolRetrieveApplicationServerUrl(poolAddress.String(), ga)
 
-			poolInformationResponse, err := utils.SendRequest(http.MethodGet, poolUrl+"server/info", nil)
+			poolInformationResponse, err := requests.SendRequest(http.MethodGet, poolUrl+"server/info", nil)
 			var defaultResponse response.DefaultResponse
 			json.Unmarshal([]byte(poolInformationResponse), &defaultResponse)
 
