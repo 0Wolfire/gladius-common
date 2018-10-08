@@ -10,7 +10,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/gladiusio/gladius-common/pkg/db/models"
 	"github.com/gladiusio/gladius-common/pkg/blockchain/generated"
-	"github.com/gladiusio/gladius-common/pkg/routing/response"
+	"github.com/gladiusio/gladius-common/pkg/routing/responses"
 	"github.com/gladiusio/gladius-common/pkg/requests"
 	"github.com/spf13/viper"
 )
