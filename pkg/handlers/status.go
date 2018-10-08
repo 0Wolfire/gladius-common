@@ -63,7 +63,7 @@ func StatusTxHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 
-	txHashResponse := response.TxHash{Value: txHash, Status: status, Complete: complete, Transaction: transactionJSON, Receipt: receiptResponseJSON}
+	txHashResponse := responses.TxHash{Value: txHash, Status: status, Complete: complete, Transaction: transactionJSON, Receipt: receiptResponseJSON}
 
 	ResponseHandler(w, r, "null", true, nil, txHashResponse, transaction)
 }
