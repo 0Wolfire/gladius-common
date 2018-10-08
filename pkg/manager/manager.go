@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/gladiusio/gladius-utils/config"
+	"github.com/gladiusio/gladius-common/utils"
 	"github.com/kardianos/service"
 )
 
@@ -34,7 +34,7 @@ func RunService(name string, displayName string, description string, run func())
 }
 
 func getBase() []string {
-	base, err := config.GetGladiusBase()
+	base, err := utils.GetGladiusBase()
 	if err != nil {
 		log.Fatal(err)
 	}
