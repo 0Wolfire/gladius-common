@@ -76,6 +76,9 @@ func KeystoreAccountUnlockHandler(ga *blockchain.GladiusAccountManager) func(w h
 		}
 
 		address, err := ga.GetAccountAddress()
+		if err != nil {
+			ErrorHandler(w, r, "Couldn't find gladius account address", err, http.StatusBadRequest)
+		}
 		addressResponse := response.AddressResponse{Address: *address}
 
 		if ga.Unlocked() {
@@ -96,7 +99,7 @@ func KeystoreAccountUnlockHandler(ga *blockchain.GladiusAccountManager) func(w h
 				return
 			}
 
-			accountErr := AccountUnlockedErrorHandler(w, r, ga)
+			accountErr := AccountUnlocekdErrorHandler(w, r, ga)
 			if accountErr != nil {
 				return
 			}

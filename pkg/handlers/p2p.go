@@ -8,11 +8,11 @@ import (
 	"github.com/buger/jsonparser"
 	"github.com/gorilla/mux"
 
-	"github.com/gladiusio/gladius-controld/pkg/blockchain"
-	"github.com/gladiusio/gladius-controld/pkg/p2p/message"
-	"github.com/gladiusio/gladius-controld/pkg/p2p/peer"
-	"github.com/gladiusio/gladius-controld/pkg/p2p/signature"
-	"github.com/gladiusio/gladius-controld/pkg/p2p/state"
+	"github.com/gladiusio/gladius-common/pkg/blockchain"
+	"github.com/gladiusio/gladius-p2p/pkg/p2p/message"
+	"github.com/gladiusio/gladius-p2p/pkg/p2p/peer"
+	"github.com/gladiusio/gladius-p2p/pkg/p2p/signature"
+	"github.com/gladiusio/gladius-p2p/pkg/p2p/state"
 )
 
 func parseSignedMessageFromBytes(smBytes []byte) (*signature.SignedMessage, error) {
