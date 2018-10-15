@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/gladiusio/gladius-cli/utils"
 	"github.com/gladiusio/gladius-common/pkg/blockchain"
+	"github.com/gladiusio/gladius-common/pkg/utils"
 	"github.com/gladiusio/gladius-controld/pkg/routing/response"
 	"github.com/gorilla/mux"
 )
@@ -52,4 +52,15 @@ func MarketPoolsHandler(ga *blockchain.GladiusAccountManager) func(w http.Respon
 
 		ResponseHandler(w, r, "null", true, nil, poolsWithData, nil)
 	}
+}
+
+// PoolResponseForAddress formats a pool response
+func PoolResponseForAddress(poolAddress string, ga *blockchain.GladiusAccountManager) (blockchain.PoolResponse, error) {
+	poolURL, err := blockchain.PoolRetrieveApplicationServerUrl(poolAddress, ga)
+	poolResponse := blockchain.PoolResponse{Address: poolAddress, Url: poolURL}
+	if err != nil {
+		return blockchain.PoolResponse{}, err
+	}
+
+	return poolResponse, nil
 }
