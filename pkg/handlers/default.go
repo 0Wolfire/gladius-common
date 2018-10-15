@@ -9,7 +9,7 @@ import (
 	"github.com/gladiusio/gladius-common/pkg/routing/responses"
 )
 
-// ResponseHandler - Default Response Handler
+// ResponseHandler default Response Handler
 func ResponseHandler(w http.ResponseWriter, r *http.Request, m string, success bool, err *string, res interface{}, transaction *types.Transaction) {
 	errorString := ""
 
@@ -42,6 +42,7 @@ func ResponseHandler(w http.ResponseWriter, r *http.Request, m string, success b
 	return
 }
 
+// NotFoundHandler is a route not found handler
 func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	err := errors.New(r.URL.String() + " not found in available routes")
 	ErrorHandler(w, r, "Invalid request, check parameters and try again", err, http.StatusNotFound)
