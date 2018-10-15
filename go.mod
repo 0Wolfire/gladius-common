@@ -8,7 +8,6 @@ require (
 	github.com/deckarep/golang-set v1.7.1 // indirect
 	github.com/ethereum/go-ethereum v1.8.16
 	github.com/gladiusio/gladius-application-server v0.0.0-20180831154555-75ec8b96baa3
-	github.com/gladiusio/gladius-controld v0.0.0-20180831225039-43db901bd39d
 	github.com/gladiusio/gladius-p2p v0.0.0-20181008220948-6743a31a69fd
 	github.com/gladiusio/gladius-utils v0.2.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect

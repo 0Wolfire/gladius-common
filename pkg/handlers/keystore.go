@@ -6,7 +6,6 @@ import (
 
 	"github.com/gladiusio/gladius-common/pkg/blockchain"
 	"github.com/gladiusio/gladius-common/pkg/routing/responses"
-	"github.com/gladiusio/gladius-controld/pkg/routing/response"
 )
 
 type accountBody struct {
@@ -69,6 +68,7 @@ func KeystoreAccountRetrievalHandler(ga *blockchain.GladiusAccountManager) func(
 		ResponseHandler(w, r, "null", true, nil, addressResponse, nil)
 	}
 }
+
 func KeystoreAccountUnlockHandler(ga *blockchain.GladiusAccountManager) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := AccountNotFoundErrorHandler(w, r, ga)
@@ -80,7 +80,7 @@ func KeystoreAccountUnlockHandler(ga *blockchain.GladiusAccountManager) func(w h
 		if err != nil {
 			ErrorHandler(w, r, "Couldn't find gladius account address", err, http.StatusBadRequest)
 		}
-		addressResponse := response.AddressResponse{Address: *address}
+		addressResponse := responses.AddressResponse{Address: *address}
 
 		if ga.Unlocked() {
 			ResponseHandler(w, r, "Account is already unlocked", true, nil, addressResponse, nil)
@@ -100,7 +100,7 @@ func KeystoreAccountUnlockHandler(ga *blockchain.GladiusAccountManager) func(w h
 				return
 			}
 
-			accountErr := AccountUnlocekdErrorHandler(w, r, ga)
+			accountErr := AccountUnlockedErrorHandler(w, r, ga)
 			if accountErr != nil {
 				return
 			}
