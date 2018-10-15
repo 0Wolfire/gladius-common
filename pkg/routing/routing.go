@@ -9,9 +9,9 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
 
-	"github.com/gladiusio/gladius-controld/pkg/blockchain"
-	"github.com/gladiusio/gladius-controld/pkg/p2p/peer"
-	"github.com/gladiusio/gladius-controld/pkg/routing/handlers"
+	"github.com/gladiusio/gladius-common/pkg/blockchain"
+	"github.com/gladiusio/gladius-p2p/pkg/p2p/peer"
+	"github.com/gladiusio/gladius-common/pkg/handlers"
 	ghandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -129,101 +129,6 @@ func AppendStatusEndpoints(router *mux.Router) error {
 	statusRouter.HandleFunc("/tx/{tx:0[xX][0-9a-fA-F]{64}}", handlers.StatusTxHandler).
 		Methods(http.MethodGet).
 		Name("status-tx")
-
-	return nil
-}
-
-func AppendNodeManagerEndpoints(router *mux.Router, ga *blockchain.GladiusAccountManager) error {
-	// Initialize Base API sub-route
-	InitializeAPISubRoutes(router)
-
-	// Node Sub-Routes
-	nodeRouter := apiRouter.PathPrefix("/node").Subrouter()
-	// Node pool applications
-	nodeRouter.HandleFunc("/applications", handlers.NodeViewAllApplicationsHandler(ga)).
-		Methods(http.MethodGet)
-	// Node application to Pool
-	nodeRouter.HandleFunc("/applications/{poolAddress:0[xX][0-9a-fA-F]{40}}/new", handlers.NodeNewApplicationHandler(ga)).
-		Methods(http.MethodPost)
-	nodeRouter.HandleFunc("/applications/{poolAddress:0[xX][0-9a-fA-F]{40}}/view", handlers.NodeViewApplicationHandler(ga)).
-		Methods(http.MethodGet)
-
-	// Pool Sub-Routes
-	poolRouter := apiRouter.PathPrefix("/pool").Subrouter()
-	// Retrieve owned Pool if available
-	poolRouter.HandleFunc("/", nil)
-	// Pool Retrieve Data
-	poolRouter.HandleFunc("/{poolAddress:0[xX][0-9a-fA-F]{40}}", handlers.PoolPublicDataHandler(ga)).
-		Methods(http.MethodGet)
-
-	return nil
-}
-
-func AppendMarketEndpoints(router *mux.Router, ga *blockchain.GladiusAccountManager) error {
-	// Initialize Base API sub-route
-	InitializeAPISubRoutes(router)
-
-	// Market Sub-Routes
-	marketRouter := apiRouter.PathPrefix("/market").Subrouter()
-	marketRouter.HandleFunc("/pools", handlers.MarketPoolsHandler(ga))
-
-	return nil
-}
-
-func AppendPoolManagerEndpoints(router *mux.Router, ga *blockchain.GladiusAccountManager, db *gorm.DB) error {
-	// Initialize Base API sub-route
-	InitializeAPISubRoutes(router)
-
-	// Pool
-	poolRouter := apiRouter.PathPrefix("/pool").Subrouter()
-	// Pool data, both public and private data can be set here
-	poolRouter.HandleFunc("/{poolAddress:0[xX][0-9a-fA-F]{40}}/data", handlers.PoolPublicDataHandler(ga)).
-		Methods(http.MethodGet)
-	poolRouter.HandleFunc("/applications/pending/pool", handlers.PoolRetrievePendingPoolConfirmationApplicationsHandler(db)).
-		Methods(http.MethodGet)
-	poolRouter.HandleFunc("/applications/pending/node", handlers.PoolRetrievePendingNodeConfirmationApplicationsHandler(db)).
-		Methods(http.MethodGet)
-	poolRouter.HandleFunc("/applications/rejected", handlers.PoolRetrieveRejectedApplicationsHandler(db)).
-		Methods(http.MethodGet)
-	poolRouter.HandleFunc("/applications/approved", handlers.PoolRetrieveApprovedApplicationsHandler(db)).
-		Methods(http.MethodGet)
-
-	// Market
-	marketRouter := apiRouter.PathPrefix("/market").Subrouter()
-	marketRouter.HandleFunc("/pools/owned", handlers.MarketPoolsOwnedHandler(ga))
-	marketRouter.HandleFunc("/pools/create", handlers.MarketPoolsCreateHandler(ga)).
-		Methods(http.MethodPost)
-
-	return nil
-}
-
-func AppendServerEndpoints(router *mux.Router, db *gorm.DB) error {
-	// Initialize Base API sub-route
-	InitializeAPISubRoutes(router)
-	// Applications
-	applicationRouter := apiRouter.PathPrefix("/server").Subrouter()
-	applicationRouter.HandleFunc("/info", handlers.PublicPoolInformationHandler(db)).
-		Methods(http.MethodGet)
-
-	return nil
-}
-
-func AppendApplicationEndpoints(router *mux.Router, db *gorm.DB) error {
-	// Initialize Base API sub-route
-	InitializeAPISubRoutes(router)
-
-	// Applications
-	applicationRouter := apiRouter.PathPrefix("/applications").Subrouter()
-	applicationRouter.HandleFunc("/new", handlers.PoolNewApplicationHandler(db)).
-		Methods(http.MethodPost)
-	applicationRouter.HandleFunc("/edit", handlers.PoolEditApplicationHandler(db)).
-		Methods(http.MethodPost)
-	applicationRouter.HandleFunc("/view", handlers.PoolViewApplicationHandler(db)).
-		Methods(http.MethodPost)
-	applicationRouter.HandleFunc("/status", handlers.PoolStatusViewHandler(db)).
-		Methods(http.MethodPost)
-	applicationRouter.HandleFunc("/pool/contains/{walletAddress:0[xX][0-9a-fA-F]{40}}", handlers.PoolContainsNode(db))
-	applicationRouter.HandleFunc("/nodes", handlers.PoolNodes(db))
 
 	return nil
 }

@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/gladiusio/gladius-common/utils"
+	"github.com/gladiusio/gladius-common/pkg/utils"
 	"github.com/kardianos/service"
 )
 

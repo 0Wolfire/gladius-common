@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/gladiusio/gladius-controld/pkg/routing/response"
+	"github.com/gladiusio/gladius-common/pkg/routing/responses"
 )
 
 // ResponseHandler - Default Response Handler
@@ -17,7 +17,7 @@ func ResponseHandler(w http.ResponseWriter, r *http.Request, m string, success b
 		errorString = *err
 	}
 
-	responseStruct := response.DefaultResponse{
+	responseStruct := responses.DefaultResponse{
 		Message:     m,
 		Success:     success,
 		Error:       errorString,

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gladiusio/gladius-common/pkg/blockchain"
+	"github.com/gladiusio/gladius-common/pkg/routing/responses"
 	"github.com/gladiusio/gladius-controld/pkg/routing/response"
 )
 
@@ -46,7 +47,7 @@ func KeystoreAccountCreationHandler(ga *blockchain.GladiusAccountManager) func(w
 			return
 		}
 
-		addressResponse := response.AddressResponse{Address: *address}
+		addressResponse := responses.AddressResponse{Address: *address}
 
 		ResponseHandler(w, r, "null", true, nil, addressResponse, nil)
 	}
@@ -63,7 +64,7 @@ func KeystoreAccountRetrievalHandler(ga *blockchain.GladiusAccountManager) func(
 			return
 		}
 
-		addressResponse := response.AddressResponse{Address: *address}
+		addressResponse := responses.AddressResponse{Address: *address}
 
 		ResponseHandler(w, r, "null", true, nil, addressResponse, nil)
 	}
