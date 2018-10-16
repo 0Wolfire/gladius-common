@@ -41,17 +41,18 @@ func InitializeRouter() (*mux.Router, error) {
 
 func InitializeAPISubRoutes(router *mux.Router) (*mux.Router) {
 	// Base API Sub-Routes
-	subRouter := router.GetRoute("/api")
-
-	if subRouter == nil {
-		subRouter = router.PathPrefix("/api").Subrouter()
+	subRoute := router.GetRoute("/api")
+	
+	if subRoute == nil {
+		subRouter := router.PathPrefix("/api").Subrouter()
 		subRouter.Use(responseMiddleware)
 		subRouter.NotFoundHandler = http.HandlerFunc(handlers.NotFoundHandler)
+		
+		return subRouter
+	} else {
+		return router
 	}
-
-	return subRouter
 }
-
 
 func AppendP2PEndPoints(router *mux.Router, ga *blockchain.GladiusAccountManager) error {
 	InitializeAPISubRoutes(router)
