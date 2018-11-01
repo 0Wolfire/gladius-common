@@ -238,32 +238,56 @@ type EtherscanTransaction struct {
 }
 
 func GetAccountTransactions(address common.Address, options TransactionOptions) (EtherscanTransactionsResponse, error) {
-	resp, err := http.Get("https://api.etherscan.io/api?module=account&action=txlist&address=" + address.String() + "&startblock=0&endblock=latest&sort=asc&apikey=3VRW685YYESSYIFVND3DVN9ZNF4BTT1GB8")
+	ethResp, err := http.Get("https://api.etherscan.io/api?module=account&action=txlist&address=" + address.String() + "&startblock=0&endblock=latest&sort=asc&apikey=3VRW685YYESSYIFVND3DVN9ZNF4BTT1GB8")
 
 	if err != nil {
 		return EtherscanTransactionsResponse{}, err
 	}
 
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	glaResp, err := http.Get("https://api.etherscan.io/api?module=account&action=tokentx&address=" + address.String() + "&startblock=0&endblock=latest&sort=asc&apikey=3VRW685YYESSYIFVND3DVN9ZNF4BTT1GB8")
+	if err != nil {
+		return EtherscanTransactionsResponse{}, err
+	}
 
-	result := EtherscanTransactionsResponse{}
-	json.Unmarshal(body, &result)
+	defer ethResp.Body.Close()
+	ethBody, err := ioutil.ReadAll(ethResp.Body)
+
+	defer glaResp.Body.Close()
+	glaBody, err := ioutil.ReadAll(glaResp.Body)
+
+	ethResult := EtherscanTransactionsResponse{}
+	json.Unmarshal(ethBody, &ethResult)
+
+	glaResult := EtherscanTransactionsResponse{}
+	json.Unmarshal(glaBody, &glaResult)
+
 	var filteredTransactions []EtherscanTransaction
 
 	if options.Filters != nil {
-		for _, transaction := range result.Transactions {
-			if options.Filters.EthTransfer && transaction.Value != "0" {
+
+		if options.Filters.EthTransfer { // eth
+			for _, transaction := range ethResult.Transactions {
 				filteredTransactions = append(filteredTransactions, transaction)
-			} else if !options.Filters.EthTransfer && transaction.Value == "0" {
+			}
+		} else if !options.Filters.EthTransfer { // gla
+			for _, transaction := range glaResult.Transactions {
 				filteredTransactions = append(filteredTransactions, transaction)
 			}
 		}
 
-		result.Transactions = filteredTransactions
+		ethResult.Transactions = filteredTransactions
+	} else {
+		for _, transaction := range ethResult.Transactions {
+			filteredTransactions = append(filteredTransactions, transaction)
+		}
+		for _, transaction := range glaResult.Transactions {
+			filteredTransactions = append(filteredTransactions, transaction)
+		}
+
+		ethResult.Transactions = filteredTransactions
 	}
 
-	return result, nil
+	return ethResult, nil
 }
 
 // GetAuth gets the authenticator for the go bindings of our smart contracts
