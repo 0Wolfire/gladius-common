@@ -3,6 +3,7 @@ package blockchain
 import (
 	"errors"
 	"io/ioutil"
+	"math"
 	"strings"
 
 	"encoding/json"
@@ -118,26 +119,37 @@ const (
 	GLA BalanceType = 1
 )
 
+type PrettyBalance struct {
+	Value 	float64 `json:"value"`
+	Symbol 	string `json:"symbol"`
+	Name 	string `json:"name"`
+}
+
 type Balance struct {
-	Value  uint64 `json:"value"`
-	Symbol string `json:"symbol"`
+	RawValue  		uint64 			`json:"value"`
+	BalanceType		BalanceType		`json:"balanceType"`
+	PrettyBalance  	*PrettyBalance 	`json:"formattedBalance"`
+	UsdBalance  	*PrettyBalance 	`json:"usdBalance,omitempty"`
 }
 
 func GetAccountBalance(address common.Address, symbol BalanceType) (Balance, error) {
 	var resp *http.Response
 	var err error
 	var symbolString string
+	var symbolName string
 
-	glaTokenAddress := "0x972c1e9698b218acc3e7869c1ccfefd3808bdbb2"
+	glaTokenAddress := "0x71d01db8d6a2fbea7f8d434599c237980c234e4c"
 
 	switch symbol {
 	case ETH:
 		resp, err = http.Get("https://api.etherscan.io/api?module=account&action=balance&address=" + address.String() + "&tag=latest&apikey=3VRW685YYESSYIFVND3DVN9ZNF4BTT1GB8")
 		symbolString = "ETH"
+		symbolName = "Ethereum"
 		break
 	case GLA:
 		resp, err = http.Get("https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=" + glaTokenAddress + "&address=" + address.String() + "&apikey=3VRW685YYESSYIFVND3DVN9ZNF4BTT1GB8")
 		symbolString = "GLA"
+		symbolName = "Gladius"
 		break
 	}
 
@@ -162,7 +174,30 @@ func GetAccountBalance(address common.Address, symbol BalanceType) (Balance, err
 		return Balance{}, err
 	}
 
-	balance := Balance{Value: balanceInt, Symbol: symbolString}
+	floatMoved := float64(1.0)
+	floatBalance := math.Round(floatMoved * 100) / 100
+
+	switch symbol {
+	case ETH:
+		floatMoved = float64(balanceInt) / 10000000000000000000
+		floatBalance = math.Round(floatMoved * 1000) / 100
+		break
+	case GLA:
+		floatMoved = float64(balanceInt) / 100000000
+		floatBalance = math.Round(floatMoved * 100) / 100
+		break
+	}
+
+	//stringBalance := strconv.FormatFloat(floatBalance, 'f', 2, 64)
+	balance := Balance{
+		RawValue: balanceInt, 
+		BalanceType: symbol,
+		PrettyBalance: &PrettyBalance{
+			Value: floatBalance,
+			Symbol: symbolString,
+			Name: symbolName,
+		},
+	}
 
 	return balance, nil
 }
