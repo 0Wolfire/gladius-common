@@ -96,9 +96,6 @@ func AppendP2PEndPoints(router *mux.Router, ga *blockchain.GladiusAccountManager
 }
 
 func AppendAccountManagementEndpoints(router *mux.Router) error {
-	// Initialize Base API sub-route
-	InitializeAPISubRoutes(router)
-
 	// Account Management
 	accountRouter := apiRouter.PathPrefix("/account/{address:0[xX][0-9a-fA-F]{40}}").Subrouter()
 	accountRouter.HandleFunc("/balance/{symbol:[a-z]{3}}", handlers.AccountBalanceHandler)
