@@ -237,57 +237,26 @@ type EtherscanTransaction struct {
 	Confirmations     string `json:"confirmations"`
 }
 
-func GetAccountTransactions(address common.Address, options TransactionOptions) (EtherscanTransactionsResponse, error) {
-	ethResp, err := http.Get("https://api.etherscan.io/api?module=account&action=txlist&address=" + address.String() + "&startblock=0&endblock=latest&sort=asc&apikey=3VRW685YYESSYIFVND3DVN9ZNF4BTT1GB8")
-
+func getTransactions(url string) (EtherscanTransactionsResponse, error) {
+	resp, err := http.Get(url)
 	if err != nil {
 		return EtherscanTransactionsResponse{}, err
 	}
 
-	glaResp, err := http.Get("https://api.etherscan.io/api?module=account&action=tokentx&address=" + address.String() + "&startblock=0&endblock=latest&sort=asc&apikey=3VRW685YYESSYIFVND3DVN9ZNF4BTT1GB8")
-	if err != nil {
-		return EtherscanTransactionsResponse{}, err
-	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	transactionsResponse := EtherscanTransactionsResponse{}
+	json.Unmarshal(body, &transactionsResponse)
 
-	defer ethResp.Body.Close()
-	ethBody, err := ioutil.ReadAll(ethResp.Body)
+	return transactionsResponse, nil
+}
 
-	defer glaResp.Body.Close()
-	glaBody, err := ioutil.ReadAll(glaResp.Body)
+func GetEthereumAccountTransactions(address common.Address) (EtherscanTransactionsResponse, error) {
+	return getTransactions("https://api.etherscan.io/api?module=account&action=txlist&address=" + address.String() + "&startblock=0&endblock=latest&sort=asc&apikey=3VRW685YYESSYIFVND3DVN9ZNF4BTT1GB8")
+}
 
-	ethResult := EtherscanTransactionsResponse{}
-	json.Unmarshal(ethBody, &ethResult)
-
-	glaResult := EtherscanTransactionsResponse{}
-	json.Unmarshal(glaBody, &glaResult)
-
-	var filteredTransactions []EtherscanTransaction
-
-	if options.Filters != nil {
-
-		if options.Filters.EthTransfer { // eth
-			for _, transaction := range ethResult.Transactions {
-				filteredTransactions = append(filteredTransactions, transaction)
-			}
-		} else if !options.Filters.EthTransfer { // gla
-			for _, transaction := range glaResult.Transactions {
-				filteredTransactions = append(filteredTransactions, transaction)
-			}
-		}
-
-		ethResult.Transactions = filteredTransactions
-	} else {
-		for _, transaction := range ethResult.Transactions {
-			filteredTransactions = append(filteredTransactions, transaction)
-		}
-		for _, transaction := range glaResult.Transactions {
-			filteredTransactions = append(filteredTransactions, transaction)
-		}
-
-		ethResult.Transactions = filteredTransactions
-	}
-
-	return ethResult, nil
+func GetGladiusAccountTransactions(address common.Address) (EtherscanTransactionsResponse, error) {
+	return getTransactions("https://api.etherscan.io/api?module=account&action=tokentx&address=" + address.String() + "&startblock=0&endblock=latest&sort=asc&apikey=3VRW685YYESSYIFVND3DVN9ZNF4BTT1GB8")
 }
 
 // GetAuth gets the authenticator for the go bindings of our smart contracts
