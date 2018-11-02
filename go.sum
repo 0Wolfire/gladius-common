@@ -127,6 +127,7 @@ golang.org/x/tools v0.0.0-20181008174144-ae971d722069 h1:sNxef6DV9Ji6sJ+Tdbc8Lev
 golang.org/x/tools v0.0.0-20181008174144-ae971d722069/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 gopkg.in/AlecAivazis/survey.v1 v1.6.2 h1:vAFgA47sDEoYoqDd8NMoCsewZmqnUSy2yVeaTBFrfY0=
 gopkg.in/AlecAivazis/survey.v1 v1.6.2/go.mod h1:2Ehl7OqkBl3Xb8VmC4oFW2bItAhnUfzIjrOzwRxCrOU=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce h1:+JknDZhAj8YMt7GC73Ei8pv4MzjDUNPHgQWJdtMAaDU=
 gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce/go.mod h1:5AcXVHNjg+BDxry382+8OKon8SEWiKktQR07RKPsv1c=
