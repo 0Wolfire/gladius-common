@@ -10,8 +10,8 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/gladiusio/gladius-common/pkg/blockchain"
-	"github.com/gladiusio/gladius-p2p/pkg/p2p/peer"
 	"github.com/gladiusio/gladius-common/pkg/handlers"
+	"github.com/gladiusio/gladius-p2p/pkg/p2p/peer"
 	ghandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -99,8 +99,7 @@ func AppendAccountManagementEndpoints(router *mux.Router) error {
 	// Account Management
 	accountRouter := apiRouter.PathPrefix("/account/{address:0[xX][0-9a-fA-F]{40}}").Subrouter()
 	accountRouter.HandleFunc("/balance/{symbol:[a-z]{3}}", handlers.AccountBalanceHandler)
-	accountRouter.HandleFunc("/transactions", handlers.AccountTransactionsHandler).
-		Methods(http.MethodPost)
+	accountRouter.HandleFunc("/transactions/{symbol:[a-z]{3}}", handlers.AccountTransactionsHandler)
 
 	return nil
 }

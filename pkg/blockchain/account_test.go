@@ -30,12 +30,12 @@ func TestGetAccountBalance(t *testing.T) {
 
 func TestGetAccountTransactions(t *testing.T) {
 	address := common.HexToAddress("0xddf4192f04856aa4afe906e3d811e71a93eeeb24")
-	filter := blockchain.TransactionOptions{
-		Filters: &blockchain.TransactionFilter{
-			EthTransfer:true,
-		},
-	}
-	response, _ := blockchain.GetAccountTransactions(address, filter)
-	ethBalanceJson, _ := json.Marshal(response)
-	fmt.Println(string(ethBalanceJson))
+
+	ethResponse, _ := blockchain.GetEthereumAccountTransactions(address)
+	ethResponseJson, _ := json.Marshal(ethResponse)
+	fmt.Println(string(ethResponseJson))
+
+	glaResponse, _ := blockchain.GetGladiusAccountTransactions(address)
+	glaResponseJson, _ := json.Marshal(glaResponse)
+	fmt.Println(string(glaResponseJson))
 }

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -38,13 +37,22 @@ func AccountBalanceHandler(w http.ResponseWriter, r *http.Request) {
 
 func AccountTransactionsHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	symbol := vars["symbol"]
 	address := vars["address"]
+	walletAddress := common.HexToAddress(address)
 
-	decoder := json.NewDecoder(r.Body)
-	var options blockchain.TransactionOptions
-	err := decoder.Decode(&options)
+	var transactions blockchain.EtherscanTransactionsResponse
+	var err error
 
-	transactions, err := blockchain.GetAccountTransactions(common.HexToAddress(address), options)
+	if symbol == "gla" {
+		transactions, err = blockchain.GetGladiusAccountTransactions(walletAddress)
+	} else if symbol == "eth" {
+		transactions, err = blockchain.GetEthereumAccountTransactions(walletAddress)
+	} else {
+		symbolNotFoundErr := errors.New("symbol not found for " + symbol)
+		ErrorHandler(w, r, "Symbol not supported at this time, try `eth` or `gla`", symbolNotFoundErr, http.StatusNotFound)
+		return
+	}
 
 	if err != nil {
 		ErrorHandler(w, r, "Could not retrieve transactions for "+address, err, http.StatusInternalServerError)

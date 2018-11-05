@@ -5,7 +5,9 @@ require (
 	github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da // indirect
 	github.com/btcsuite/btcd v0.0.0-20181013004428-67e573d211ac // indirect
 	github.com/buger/jsonparser v0.0.0-20180910192245-6acdf747ae99
+	github.com/cespare/cp v1.0.0 // indirect
 	github.com/deckarep/golang-set v1.7.1 // indirect
+	github.com/edsrzf/mmap-go v0.0.0-20170320065105-0bce6a688712 // indirect
 	github.com/ethereum/go-ethereum v1.8.16
 	github.com/gladiusio/gladius-application-server v0.0.0-20180831154555-75ec8b96baa3
 	github.com/gladiusio/gladius-cli v0.0.0-20180821194358-283e3c80a6d0
