@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
 
 	"github.com/gladiusio/gladius-common/pkg/blockchain"
@@ -15,9 +14,6 @@ import (
 	ghandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
-
-var apiRouter *mux.Router
-var Database *gorm.DB
 
 type ControlRouter struct {
 	Router *mux.Router
@@ -34,32 +30,10 @@ func (cRouter *ControlRouter) Start() {
 	log.Fatal(http.ListenAndServe(":"+cRouter.Port, ghandlers.CORS()(cRouter.Router)))
 }
 
-func InitializeRouter() (*mux.Router, error) {
-	router := mux.NewRouter()
-	return router, nil
-}
-
-func InitializeAPISubRoutes(router *mux.Router) (*mux.Router) {
-	// Base API Sub-Routes
-	subRoute := router.GetRoute("/api")
-	
-	if subRoute == nil {
-		subRouter := router.PathPrefix("/api").Subrouter()
-		subRouter.Use(responseMiddleware)
-		subRouter.NotFoundHandler = http.HandlerFunc(handlers.NotFoundHandler)
-		
-		return subRouter
-	} else {
-		return router
-	}
-}
-
 func AppendP2PEndPoints(router *mux.Router, ga *blockchain.GladiusAccountManager) error {
-	InitializeAPISubRoutes(router)
-
 	// P2P setup
 	peerStruct := peer.New(ga)
-	p2pRouter := apiRouter.PathPrefix("/p2p").Subrouter()
+	p2pRouter := router.PathPrefix("/p2p").Subrouter()
 	// P2P Message Routes
 	p2pRouter.HandleFunc("/message/sign", handlers.CreateSignedMessageHandler(ga)).
 		Methods(http.MethodPost)
@@ -97,7 +71,7 @@ func AppendP2PEndPoints(router *mux.Router, ga *blockchain.GladiusAccountManager
 
 func AppendAccountManagementEndpoints(router *mux.Router) error {
 	// Account Management
-	accountRouter := apiRouter.PathPrefix("/account/{address:0[xX][0-9a-fA-F]{40}}").Subrouter()
+	accountRouter := router.PathPrefix("/account/{address:0[xX][0-9a-fA-F]{40}}").Subrouter().StrictSlash(true)
 	accountRouter.HandleFunc("/balance/{symbol:[a-z]{3}}", handlers.AccountBalanceHandler)
 	accountRouter.HandleFunc("/transactions/{symbol:[a-z]{3}}", handlers.AccountTransactionsHandler)
 
@@ -105,11 +79,8 @@ func AppendAccountManagementEndpoints(router *mux.Router) error {
 }
 
 func AppendWalletManagementEndpoints(router *mux.Router, ga *blockchain.GladiusAccountManager) error {
-	// Initialize Base API sub-route
-	InitializeAPISubRoutes(router)
-
 	// Key Management
-	walletRouter := apiRouter.PathPrefix("/keystore").Subrouter()
+	walletRouter := router.PathPrefix("/keystore").Subrouter().StrictSlash(true)
 	walletRouter.HandleFunc("/account/create", handlers.KeystoreAccountCreationHandler(ga)).
 		Methods(http.MethodPost)
 	walletRouter.HandleFunc("/account", handlers.KeystoreAccountRetrievalHandler(ga))
@@ -120,11 +91,8 @@ func AppendWalletManagementEndpoints(router *mux.Router, ga *blockchain.GladiusA
 }
 
 func AppendStatusEndpoints(router *mux.Router) error {
-	// Initialize Base API sub-route
-	InitializeAPISubRoutes(router)
-
 	// TxHash Status Sub-Routes
-	statusRouter := apiRouter.PathPrefix("/status").Subrouter()
+	statusRouter := router.PathPrefix("/status").Subrouter().StrictSlash(true)
 	statusRouter.HandleFunc("/", handlers.StatusHandler).
 		Methods(http.MethodGet, http.MethodPut).
 		Name("status")
