@@ -105,7 +105,7 @@ func AppendStatusEndpoints(router *mux.Router) error {
 
 func AppendVersionEndpoints(router *mux.Router) error {
 	versionRouter := router.PathPrefix("/version").Subrouter()
-	versionRouter.HandleFunc("/version", handlers.VersionHandler()).Methods("GET")
+	versionRouter.HandleFunc("/", handlers.VersionHandler()).Methods("GET")
 
 	return nil
 }
