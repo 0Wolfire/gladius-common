@@ -103,6 +103,13 @@ func AppendStatusEndpoints(router *mux.Router) error {
 	return nil
 }
 
+func AppendVersionEndpoints(router *mux.Router) error {
+	versionRouter := router.PathPrefix("/version").Subrouter()
+	versionRouter.HandleFunc("/version", handlers.VersionHandler()).Methods("GET")
+
+	return nil
+}
+
 func responseMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
