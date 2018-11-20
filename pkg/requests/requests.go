@@ -36,7 +36,7 @@ func SendRequest(requestType, url string, data interface{}) (string, error) {
 		return "", err
 	}
 
-	req.Header.Set("User-Agent", "gladius-gateway")
+	req.Header.Set("User-Agent", "gladius")
 	req.Header.Set("Content-Type", "application/json")
 
 	// Send the request via a client
