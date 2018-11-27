@@ -103,9 +103,8 @@ func AppendStatusEndpoints(router *mux.Router) error {
 	return nil
 }
 
-func AppendVersionEndpoints(router *mux.Router) error {
-	router.HandleFunc("/version", handlers.VersionHandler()).Methods("GET")
-
+func AppendVersionEndpoints(router *mux.Router, version string) error {
+	router.HandleFunc("/version", handlers.VersionHandler(version)).Methods("GET")
 	return nil
 }
 
