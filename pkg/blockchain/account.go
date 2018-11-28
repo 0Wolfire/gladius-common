@@ -2,8 +2,10 @@ package blockchain
 
 import (
 	"errors"
+	"github.com/gladiusio/gladius-common/pkg/utils"
 	"io/ioutil"
 	"math"
+	"path/filepath"
 	"strings"
 
 	"encoding/json"
@@ -14,7 +16,6 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/spf13/viper"
 )
 
 // GladiusAccountManager is a type that allows the user to create a keystore file,
@@ -25,7 +26,12 @@ type GladiusAccountManager struct {
 
 // NewGladiusAccountManager creates a new gladius account manager
 func NewGladiusAccountManager() *GladiusAccountManager {
-	var pathTemp = viper.GetString("wallet.directory")
+	base, err := utils.GetGladiusBase()
+	if err != nil {
+		return nil
+	}
+
+	var pathTemp = filepath.Join(base, "wallet")
 
 	ks := keystore.NewKeyStore(
 		pathTemp,

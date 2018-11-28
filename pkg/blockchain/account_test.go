@@ -8,6 +8,29 @@ import (
 	"testing"
 )
 
+func TestNewGladiusAccountManager(t *testing.T) {
+	ga := blockchain.NewGladiusAccountManager()
+	if ga == nil {
+		t.Fail()
+	}
+}
+
+func TestGladiusAccountManager_HasAccount(t *testing.T) {
+	ga := blockchain.NewGladiusAccountManager()
+	if ga == nil {
+		t.Fail()
+	}
+
+	_, err := ga.CreateAccount("password")
+	if err != nil {
+		t.Fail()
+	}
+	hasAccount := ga.HasAccount()
+	if !hasAccount {
+		t.Fail()
+	}
+}
+
 // Test for printing out the balance struct, does not assert any values
 func TestGetAccountBalance(t *testing.T) {
 	address := common.HexToAddress("0xddf4192f04856aa4afe906e3d811e71a93eeeb24")
