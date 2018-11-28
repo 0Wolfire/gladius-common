@@ -25,7 +25,7 @@ type GladiusAccountManager struct {
 
 // NewGladiusAccountManager creates a new gladius account manager
 func NewGladiusAccountManager() *GladiusAccountManager {
-	var pathTemp = viper.GetString("directory.wallet")
+	var pathTemp = viper.GetString("wallet.directory")
 
 	ks := keystore.NewKeyStore(
 		pathTemp,
