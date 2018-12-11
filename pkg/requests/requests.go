@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 // For control over HTTP client headers,
@@ -36,7 +38,12 @@ func SendRequest(requestType, url string, data interface{}) (string, error) {
 		return "", err
 	}
 
-	req.Header.Set("User-Agent", "gladius")
+	product := viper.GetString("Product.Name")
+	if len(product) < 1 {
+		product = "gladius"
+	}
+
+	req.Header.Set("User-Agent", product)
 	req.Header.Set("Content-Type", "application/json")
 
 	// Send the request via a client
