@@ -27,7 +27,12 @@ func (cRouter *ControlRouter) Start() {
 	}
 
 	log.Info().Msg("Starting API at http://localhost:" + cRouter.Port)
-	log.Fatal(http.ListenAndServe(":"+cRouter.Port, ghandlers.CORS()(cRouter.Router)))
+	go func() {
+		err := http.ListenAndServe(":"+cRouter.Port, ghandlers.CORS()(cRouter.Router))
+		if err != nil {
+			log.Fatal().Err(err).Msg("Error starting API")
+		}
+	}()
 }
 
 func AppendP2PEndPoints(router *mux.Router, ga *blockchain.GladiusAccountManager) error {
@@ -119,9 +124,9 @@ func responseMiddleware(next http.Handler) http.Handler {
 
 func loggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println()
-		log.Println(formatRequest(r))
-		log.Println()
+		log.Debug().Msg("---")
+		log.Debug().Msg(formatRequest(r))
+		log.Debug().Msg("---")
 
 		next.ServeHTTP(w, r)
 	})
