@@ -5,12 +5,12 @@ import (
 	"github.com/gladiusio/gladius-common/pkg/utils"
 	"io/ioutil"
 	"math"
-	"path/filepath"
 	"strings"
 
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"github.com/spf13/viper"
 
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -32,7 +32,7 @@ func NewGladiusAccountManager() *GladiusAccountManager {
 	}
 
 	var walletDir = viper.GetString("Wallet.Directory")
-	
+
 	ks := keystore.NewKeyStore(
 		walletDir,
 		keystore.LightScryptN,
