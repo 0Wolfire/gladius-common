@@ -5,12 +5,13 @@ import (
 	"github.com/gladiusio/gladius-common/pkg/utils"
 	"io/ioutil"
 	"math"
+	"path/filepath"
 	"strings"
 
 	"encoding/json"
+	"github.com/spf13/viper"
 	"net/http"
 	"strconv"
-	"github.com/spf13/viper"
 
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -27,6 +28,13 @@ type GladiusAccountManager struct {
 // NewGladiusAccountManager creates a new gladius account manager
 func NewGladiusAccountManager() *GladiusAccountManager {
 	var walletDir = viper.GetString("Wallet.Directory")
+	if walletDir == "" {
+		baseDir, err := utils.GetGladiusBase()
+		if err != nil {
+			return nil
+		}
+		walletDir = filepath.Join(baseDir, "wallet")
+	}
 
 	ks := keystore.NewKeyStore(
 		walletDir,

@@ -1,8 +1,6 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
-	"strings"
 	"time"
 )
 
@@ -34,31 +32,4 @@ type NodeRequestPayload struct {
 	Bio            string `json:"bio"`
 	Location       string `json:"location"`
 	IPAddress      string `json:"ipAddress"`
-}
-
-func CreateApplication(payload *NodeRequestPayload) NodeProfile {
-	profile := NodeProfile{
-		IPAddress:      payload.IPAddress,
-		EstimatedSpeed: payload.EstimatedSpeed,
-		Wallet:         strings.ToLower(payload.Wallet),
-		Name:           payload.Name,
-		Email:          payload.Email,
-		Bio:            payload.Bio,
-		Location:       payload.Location,
-	}
-
-	return profile
-}
-
-func (profile *NodeProfile) AfterUpdate(tx *gorm.DB) (err error) {
-	if !profile.Pending && (profile.Approved != (profile.PoolAccepted && profile.NodeAccepted)) {
-		tx.Model(&NodeProfile{}).Where("id = ?", profile.ID).
-			Update("accepted", profile.PoolAccepted && profile.NodeAccepted)
-	}
-
-	if profile.Wallet != strings.ToLower(profile.Wallet) {
-		tx.Model(&NodeProfile{}).Where("id like ?", profile.Wallet).Update("wallet", strings.ToLower(profile.Wallet))
-	}
-
-	return
 }

@@ -2,7 +2,7 @@ package routing
 
 import (
 	"fmt"
-	"log"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"strings"
 
@@ -26,7 +26,7 @@ func (cRouter *ControlRouter) Start() {
 		cRouter.Router.Use(loggingMiddleware)
 	}
 
-	fmt.Println("Starting API at http://localhost:" + cRouter.Port)
+	log.Info().Msg("Starting API at http://localhost:" + cRouter.Port)
 	log.Fatal(http.ListenAndServe(":"+cRouter.Port, ghandlers.CORS()(cRouter.Router)))
 }
 
