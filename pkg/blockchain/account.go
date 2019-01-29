@@ -31,10 +31,10 @@ func NewGladiusAccountManager() *GladiusAccountManager {
 		return nil
 	}
 
-	var pathTemp = filepath.Join(base, "wallet")
-
+	var walletDir = viper.GetString("Wallet.Directory")
+	
 	ks := keystore.NewKeyStore(
-		pathTemp,
+		walletDir,
 		keystore.LightScryptN,
 		keystore.LightScryptP)
 
